@@ -3,12 +3,12 @@
 
 <head>
   <meta charset="utf-8">
-  <title>Scatter Plot</title>
+  <title>Jeffrey's Random Data</title>
 </head>
 
 <body>
   <script src="https://d3js.org/d3.v4.min.js"></script>
-  <script id="mainScript">
+  <script id="scatterPlotScript">
     let scatter = {
       margin: {
         top: 30,
@@ -663,7 +663,7 @@
             scatter.data = reader.result.trim().split(/\r\n|\n/);
           }
           if (input.files[0].type === "text/tab-separated-values") {
-            separator = ' ';
+            separator = '\t';
             scatter.data = reader.result.trim().split(/\r\n|\n/);
           }
           let headers = scatter.data[0].split(separator);
@@ -1013,9 +1013,9 @@
       exportHTML.innerHTML = "Export HTML";
       document.body.appendChild(exportHTML);
       exportHTML.addEventListener("click", (e) => {
-        let scriptString = document.getElementById('mainScript').innerHTML;
+        let scriptString = document.getElementById('scatterPlotScript').innerHTML;
         scriptString = scriptString.slice(scriptString.indexOf('function responsivefy(svg, boolean)'), scriptString.indexOf('document.addEventListener("DOMContentLoaded"'));
-        let htmlString = '<!DOCTYPE html>\n<html lang="en">\n\n<head>\n\t<meta charset="utf-8">\n\t<title>Scatter Plot</title>\n</head>\n\n<body>\n\t<script src="https://d3js.org/d3.v4.min.js"></' + 'script>\n\t<script id="mainScript">'
+        let htmlString = '<!DOCTYPE html>\n<html lang="en">\n\n<head>\n\t<meta charset="utf-8">\n\t<title>Scatter Plot</title>\n</head>\n\n<body>\n\t<script src="https://d3js.org/d3.v4.min.js"></' + 'script>\n\t<script id="scatterPlotScript">'
           + '\n\t\tlet scatter = ' + JSON.stringify(scatter) + ';\n\t' + scriptString + '\n\t</' + 'script>' + '\n</' + 'body>';
         // console.log(htmlString);
         const htmlFile = new Blob([htmlString], { type: 'text/html' });

@@ -1,0 +1,9 @@
+body {
+  background-color: whitesmoke;
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size: 10pt;
+  width: 100%;
+  min-width: 700px;
+  margin: 0;
+  padding: 0;
+}

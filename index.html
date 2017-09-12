@@ -4,6 +4,7 @@
 <head>
   <meta charset="utf-8">
   <title>Jeffrey's Random Data</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 
 <body>
@@ -17,7 +18,7 @@
         left: 40
       },
       width: 960,
-      height: 500,
+      height: 600,
       responsiveResize: true,
       axes: {
         xAxis: {
@@ -146,9 +147,13 @@
     }
 
     function createSvg(settings) {
+      const scatterPlotContainer = document.createElement("div");
+      scatterPlotContainer.setAttribute("id", "scatterPlotContainer");
+      scatterPlotContainer.setAttribute('style', 'width:80%; float:right');
+      document.body.appendChild(scatterPlotContainer);
       const svgContainer = document.createElement("div");
       svgContainer.setAttribute("id", "svgContainer");
-      document.body.insertBefore(svgContainer, document.body.firstChild);
+      scatterPlotContainer.insertBefore(svgContainer, scatterPlotContainer.firstChild);
       let svg = d3.select(svgContainer).insert("svg", ":first-child")
         .attr("id", "svg")
         .attr("width", settings.width)
@@ -617,14 +622,19 @@
     plotPoints(svg, scatter, plot);
 
     document.addEventListener("DOMContentLoaded", function (event) {
+      const scatterPlotSettingsContainer = document.createElement("div");
+      scatterPlotSettingsContainer.setAttribute("id", "scatterPlotSettingsContainer");
+      scatterPlotSettingsContainer.setAttribute('style', 'float:left; width:20%; font-weight:bold');
+      document.body.appendChild(scatterPlotSettingsContainer);
+
       const settingsArea = document.createElement("textarea");
       settingsArea.setAttribute("id", "settingsArea");
       settingsArea.innerHTML = JSON.stringify(scatter, null, 2);
-      settingsArea.setAttribute("style", "width:250px;height:250px;");
+      settingsArea.setAttribute("style", "width:90%;height:250px;");
 
       const updateButton = document.createElement("button");
       updateButton.innerHTML = "New data!";
-      document.body.appendChild(updateButton);
+      scatterPlotContainer.appendChild(updateButton);
       updateButton.addEventListener("click", (e) => {
         scatter.data = create_data(null, null);
         if (scatter.regressionLine.exist) {
@@ -642,15 +652,18 @@
         settingsArea.innerHTML = JSON.stringify(scatter, null, 2);
       });
 
-      document.body.appendChild(document.createElement("br"));
+      scatterPlotSettingsContainer.appendChild(document.createElement("br"));
 
+      const importCsvTsvButtonContainer = document.createElement("div");
+      importCsvTsvButtonContainer.setAttribute("class", "scatterPlotSettingsContainerDiv");
+      scatterPlotSettingsContainer.appendChild(importCsvTsvButtonContainer);
       const importCsvTsvButton = document.createElement("input");
       importCsvTsvButton.setAttribute("id", "importCsvTsv");
       importCsvTsvButton.setAttribute("type", "file");
       importCsvTsvButton.setAttribute("accept", ".csv,.tsv");
       const importCsvTsvLabel = document.createElement("label");
       importCsvTsvLabel.innerHTML = "Import data (.csv, .tsv):" + "\t";
-      document.body.appendChild(importCsvTsvLabel);
+      importCsvTsvButtonContainer.appendChild(importCsvTsvLabel);
       importCsvTsvLabel.appendChild(importCsvTsvButton);
       importCsvTsvLabel.appendChild(document.createElement("br"));
       importCsvTsvButton.addEventListener("change", (e) => {
@@ -701,6 +714,9 @@
         reader.readAsText(input.files[0]);
       });
 
+      const importJsonFormContainer = document.createElement("div");
+      importJsonFormContainer.setAttribute("class", "scatterPlotSettingsContainerDiv");
+      scatterPlotSettingsContainer.appendChild(importJsonFormContainer);
       const importJsonForm = document.createElement("form");
       importJsonForm.setAttribute("id", "importJsonForm");
       const xJsonKeyLabel = document.createElement("label");
@@ -724,14 +740,16 @@
       importJsonButton.setAttribute("accept", ".json");
       const importJsonLabel = document.createElement("label");
       importJsonLabel.innerHTML = "Import data (array of objects .json):" + "\t";
-      document.body.appendChild(importJsonForm);
+      importJsonFormContainer.appendChild(importJsonForm);
       importJsonForm.appendChild(importJsonLabel);
       importJsonLabel.appendChild(importJsonButton);
-      importJsonLabel.appendChild(document.createElement("br"));
+      importJsonForm.appendChild(document.createElement("br"));
       importJsonForm.appendChild(xJsonKeyLabel);
       xJsonKeyLabel.appendChild(xJsonKeyInput);
+      importJsonForm.appendChild(document.createElement("br"));
       importJsonForm.appendChild(yJsonKeyLabel);
       yJsonKeyLabel.appendChild(yJsonKeyInput);
+      importJsonForm.appendChild(document.createElement("br"));
       importJsonForm.appendChild(importJsonSubmit);
 
       importJsonForm.addEventListener("submit", (e) => {
@@ -787,13 +805,16 @@
         reader.readAsText(input.files[0]);
       });
 
+      const importSettingsButtonContainer = document.createElement("div");
+      importSettingsButtonContainer.setAttribute("class", "scatterPlotSettingsContainerDiv");
+      scatterPlotSettingsContainer.appendChild(importSettingsButtonContainer);
       const importSettingsButton = document.createElement("input");
       importSettingsButton.setAttribute("id", "importSettings");
       importSettingsButton.setAttribute("type", "file");
       importSettingsButton.setAttribute("accept", ".scatterplotsettings");
       const importSettingsLabel = document.createElement("label");
       importSettingsLabel.innerHTML = "Import settings:" + "\t";
-      document.body.appendChild(importSettingsLabel);
+      importSettingsButtonContainer.appendChild(importSettingsLabel);
       importSettingsLabel.appendChild(importSettingsButton);
       importSettingsLabel.appendChild(document.createElement("br"));
       importSettingsButton.addEventListener("change", (e) => {
@@ -838,6 +859,9 @@
         reader.readAsText(input.files[0]);
       });
 
+      const settingsFormContainer = document.createElement("div");
+      settingsFormContainer.setAttribute("class", "scatterPlotSettingsContainerDiv");
+      scatterPlotSettingsContainer.appendChild(settingsFormContainer);
       const settingsForm = document.createElement("form");
       settingsForm.setAttribute("id", "settingsForm");
       const settingsLabel = document.createElement("label");
@@ -845,15 +869,11 @@
       const settingsButton = document.createElement("input");
       settingsButton.setAttribute("type", "submit");
       settingsButton.setAttribute("value", "Submit settings");
-      // const settingsArea = document.createElement("textarea");
-      // settingsArea.setAttribute("id", "settingsArea");
-      // settingsArea.innerHTML = JSON.stringify(scatter, null, 2);
-      // settingsArea.setAttribute("style", "width:250px;height:250px;");
-      document.body.appendChild(settingsForm);
+      settingsFormContainer.appendChild(settingsForm);
       settingsForm.appendChild(settingsLabel);
+      settingsForm.appendChild(document.createElement("br"));
+      settingsForm.appendChild(settingsArea);
       settingsForm.appendChild(settingsButton);
-      settingsLabel.appendChild(document.createElement("br"));
-      settingsLabel.appendChild(settingsArea);
 
       settingsForm.addEventListener("submit", (e) => {
         e.preventDefault();
@@ -892,6 +912,9 @@
         checkRegressionLine(svg, scatter, plot);
       });
 
+      const dataFormContainer = document.createElement("div");
+      dataFormContainer.setAttribute("class", "scatterPlotSettingsContainerDiv");
+      scatterPlotSettingsContainer.appendChild(dataFormContainer);
       const dataForm = document.createElement("form");
       dataForm.setAttribute("id", "dataForm");
       const xDataLabel = document.createElement("label");
@@ -909,11 +932,13 @@
       const dataButton = document.createElement("input");
       dataButton.setAttribute("type", "submit");
       dataButton.setAttribute("value", "Submit data");
-      document.body.appendChild(dataForm);
+      dataFormContainer.appendChild(dataForm);
       dataForm.appendChild(xDataLabel);
       xDataLabel.appendChild(xDataInput);
+      dataForm.appendChild(document.createElement("br"));
       dataForm.appendChild(yDataLabel);
       yDataLabel.appendChild(yDataInput);
+      dataForm.appendChild(document.createElement("br"));
       dataForm.appendChild(dataButton);
 
       dataForm.addEventListener("submit", (e) => {
@@ -941,10 +966,12 @@
         checkRegressionLine(svg, scatter, plot);
       });
 
-
+      const addOnButtonContainer = document.createElement("div");
+      addOnButtonContainer.setAttribute("class", "scatterPlotSettingsContainerDiv");
+      scatterPlotSettingsContainer.appendChild(addOnButtonContainer);
       const regressButton = document.createElement("button");
       regressButton.innerHTML = "Regression Line";
-      document.body.appendChild(regressButton);
+      addOnButtonContainer.appendChild(regressButton);
       regressButton.addEventListener("click", (e) => {
         if (scatter.regressionLine.exist) {
           scatter.regressionLine.exist = false;
@@ -960,7 +987,7 @@
       let yAxisBool = scatter.axes.yAxis.exist;
       const gridButton = document.createElement("button");
       gridButton.innerHTML = "Grid Lines";
-      document.body.appendChild(gridButton);
+      addOnButtonContainer.appendChild(gridButton);
       gridButton.addEventListener("click", (e) => {
         if (scatter.gridLines.exist) {
           scatter.gridLines.exist = false;
@@ -981,12 +1008,13 @@
         settingsArea.innerHTML = JSON.stringify(scatter, null, 2);
       });
 
-      document.body.appendChild(document.createElement("br"));
-
+      const exportContainer = document.createElement("div");
+      exportContainer.setAttribute("class", "scatterPlotSettingsContainerDiv");
+      scatterPlotSettingsContainer.appendChild(exportContainer);
       const exportSettings = document.createElement("a");
       exportSettings.setAttribute("id", "exportSettings");
       exportSettings.innerHTML = "Export Settings";
-      document.body.appendChild(exportSettings);
+      exportContainer.appendChild(exportSettings);
       exportSettings.addEventListener("click", (e) => {
         const settingsCopy = scatter;
         const file = new Blob([JSON.stringify(settingsCopy)], { type: 'text/plain' })
@@ -994,24 +1022,24 @@
         exportSettings.download = 'scatterPlotSettings.scatterplotsettings';
       });
 
-      document.body.appendChild(document.createElement("br"));
+      exportContainer.appendChild(document.createElement("br"));
 
       const exportSVG = document.createElement("a");
       exportSVG.setAttribute("id", "exportSVG");
       exportSVG.innerHTML = "Export SVG";
-      document.body.appendChild(exportSVG);
+      exportContainer.appendChild(exportSVG);
       exportSVG.addEventListener("click", (e) => {
         const file = new Blob([document.getElementById("svgContainer").innerHTML], { type: 'text/html' });
         exportSVG.href = URL.createObjectURL(file);
         exportSVG.download = 'scatterPlotSVG.html';
       });
 
-      document.body.appendChild(document.createElement("br"));
+      exportContainer.appendChild(document.createElement("br"));
 
       const exportHTML = document.createElement("a");
       exportHTML.setAttribute("id", "exportHTML");
       exportHTML.innerHTML = "Export HTML";
-      document.body.appendChild(exportHTML);
+      exportContainer.appendChild(exportHTML);
       exportHTML.addEventListener("click", (e) => {
         let scriptString = document.getElementById('scatterPlotScript').innerHTML;
         scriptString = scriptString.slice(scriptString.indexOf('function responsivefy(svg, boolean)'), scriptString.indexOf('document.addEventListener("DOMContentLoaded"'));
@@ -1021,6 +1049,11 @@
         const htmlFile = new Blob([htmlString], { type: 'text/html' });
         exportHTML.href = URL.createObjectURL(htmlFile);
         exportHTML.download = 'scatterPlot.html';
+      });
+
+      const scatterPlotSettingsContainerDiv = document.getElementsByClassName("scatterPlotSettingsContainerDiv");
+      Object.keys(scatterPlotSettingsContainerDiv).forEach(el => {
+        scatterPlotSettingsContainerDiv[el].setAttribute("style", "border: 1px solid lightsteelblue");
       });
     });
   </script>

@@ -151,7 +151,7 @@
         const scatterPlotContainer = document.createElement("div");
         scatterPlotContainer.setAttribute("id", "scatterPlotContainer");
         scatterPlotContainer.setAttribute('style', 'width:80%; float:right');
-        document.body.appendChild(scatterPlotContainer);
+        document.getElementById('main').insertBefore(scatterPlotContainer, document.getElementById('header').nextSibling);
         const svgContainer = document.createElement("div");
         svgContainer.setAttribute("id", "svgContainer");
         scatterPlotContainer.insertBefore(svgContainer, scatterPlotContainer.firstChild);
@@ -628,7 +628,7 @@
       const scatterPlotSettingsContainer = document.createElement("div");
       scatterPlotSettingsContainer.setAttribute("id", "scatterPlotSettingsContainer");
       scatterPlotSettingsContainer.setAttribute('style', 'float:left; width:20%; font-weight:bold');
-      document.body.appendChild(scatterPlotSettingsContainer);
+      document.getElementById('main').insertBefore(scatterPlotSettingsContainer, document.getElementById('scatterPlotContainer').nextSibling);
 
       // Creating text area element
       const settingsArea = document.createElement("textarea");
@@ -1042,9 +1042,50 @@
       //   scatterPlotSettingsContainerClass[el].setAttribute("style", "border: 1px solid lightsteelblue");
       // });
     }
-
+  </script>
+  <div id="main">
+    <div id="header">
+      <div class="title">
+        <p>Jeffrey Ma</p>
+      </div>
+      <div class="buttonsBar">
+          <button id="scatterPlotToggle">Scatter Plot</button>
+      </div>
+    </div>
+    <div class="entries">
+    </div>
+    <div class="footer">
+      <div class="copyright">
+        <p>2017 © Jeffrey Ma</p>
+      </div>
+    </div>
+  </div>
+  <script>
     document.addEventListener("DOMContentLoaded", function (event) {
-      scatterPlotScript();
+      let scatterPlotToggle = false;
+      document.getElementById('scatterPlotToggle').addEventListener("click", (e) => {
+        if (!scatterPlotToggle) {
+          scatterPlotScript();
+          scatterPlotToggle = true;
+        } else {
+          scatterPlotContainer.remove();
+          scatterPlotSettingsContainer.remove();
+          scatterPlotToggle = false;
+        }
+      });
+      function asyncGet(url) {
+        return new Promise((resolve, reject) => {
+          const xhr = new XMLHttpRequest();
+          xhr.open("GET", url);
+          xhr.onload = () => resolve(xhr.responseText);
+          xhr.onerror = () => reject(xhr.statusText);
+          xhr.send();
+        });
+      };
+      let reddit = asyncGet('http://www.reddit.com');
+      reddit.then((a) => {
+        console.log(a);
+      });
     });
   </script>
 </body>

@@ -1049,7 +1049,7 @@
         <p>Jeffrey Ma</p>
       </div>
       <div class="buttonsBar">
-          <button id="scatterPlotToggle">Scatter Plot</button>
+        <button id="scatterPlotToggle">Scatter Plot</button>
       </div>
     </div>
     <div class="entries">
@@ -1072,19 +1072,6 @@
           scatterPlotSettingsContainer.remove();
           scatterPlotToggle = false;
         }
-      });
-      function asyncGet(url) {
-        return new Promise((resolve, reject) => {
-          const xhr = new XMLHttpRequest();
-          xhr.open("GET", url);
-          xhr.onload = () => resolve(xhr.responseText);
-          xhr.onerror = () => reject(xhr.statusText);
-          xhr.send();
-        });
-      };
-      let google = asyncGet('https://www.google.com');
-      google.then((a) => {
-        console.log(a);
       });
     });
   </script>
